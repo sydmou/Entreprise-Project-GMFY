@@ -22,7 +22,7 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
     var unreadlist=[WXMessage]()
     var statelist=[WXstate]()
     
-    
+    var currentBodyName = ""
     
     
      func meOff() {
@@ -31,31 +31,6 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
     
     func isOff(zhuangtai: WXstate) {
         
-        for(index,oldState) in enumerate (statelist)
-        
-        {
-           if (zhuangtai.name == oldState.name)
-            
-            
-          {statelist.removeAtIndex(index)
-            
-   
-            break}
-  
-        }
-        
-        statelist.append(zhuangtai)
-        
-        
-        self.tableView.reloadData()
-        
-        
-        
-        
-    }
-    
-    
-    func isOn(zhuangtai: WXstate) {
         for(index,oldState) in enumerate (statelist)
             
         {
@@ -77,8 +52,58 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
         
         
         self.tableView.reloadData()
+        
+        
     }
     
+    
+    func isOn(zhuangtai: WXstate) {
+        
+        
+        
+        
+        for(index,oldState) in enumerate (statelist)
+            
+        {
+            if (zhuangtai.name == oldState.name)
+                
+                
+            {statelist.removeAtIndex(index)
+                
+                
+                break}
+            
+        }
+        
+        statelist.append(zhuangtai)
+        
+        
+        self.tableView.reloadData()
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+  
+    func newMessage(addNewMessage: WXMessage) {
+        
+        if(addNewMessage.body != "")
+        
+        
+        {
+        
+        unreadlist.append(addNewMessage)
+        
+        self.tableView.reloadData()
+        
+        }
+        
+        
+    }
     // get orgin delagate
     
     
@@ -98,13 +123,20 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
     
     func login(){
     
+        unreadlist.removeAll(keepCapacity: false)
+        statelist.removeAll(keepCapacity: false)
         
         
-        
-    shareDelegate().conect()
-    mtstatus.image=UIImage(named: "on")
+        shareDelegate().conect()
+        mtstatus.image=UIImage(named: "on")
         
         logged=true
+        
+        
+        let myID=NSUserDefaults.standardUserDefaults().stringForKey("userNameID")
+        self.navigationItem.title=myID! + " my friend"
+        self.tableView.reloadData()
+        
     }
     
     //log off
@@ -162,7 +194,7 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
         if ( myID != nil && autologin ) {
         
         self.login()
-        self.navigationItem.title=myID! + " my friend"
+      
             
         
         
@@ -187,6 +219,24 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
     }
     
     
+    @IBAction func log(sender: UIBarButtonItem) {
+        
+         if logged {
+            
+            
+            loginoff()
+         
+         sender.image = UIImage(named: "off")
+         
+         }
+        else { login()
+            
+            
+            sender.image = UIImage(named: "on")
+        }
+        
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -197,25 +247,70 @@ class BuddyListTableViewController: UITableViewController,stateDelegate,messageD
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 0
+        return statelist.count
     }
 
-    /*
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("buddyListCell", forIndexPath: indexPath) as UITableViewCell
 
-        // Configure the cell...
+        let isOnline=statelist[indexPath.row].isOnline
+        let name=statelist[indexPath.row].name
+        
+        cell.textLabel?.text=name
 
+        var unreads = 0
+    
+        
+        for  msg  in unreadlist{
+        
+        if (name == msg.from)
+          {
+            
+            unreads++
+            
+            
+            }
+        
+        
+        }
+        
+        
+          cell.textLabel?.text=name + "(\(unreads))"
+        
+        if isOnline{cell.imageView?.image=UIImage(named: "on")}
+        
+        
+        else  {cell.imageView?.image=UIImage(named: "off")}
+        
+        
+        
         return cell
     }
-    */
 
+    
+    
+    
+    
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        
+        currentBodyName = statelist[indexPath.row].name
+        self.performSegueWithIdentifier("toChatSegue", sender: self)
+        
+        
+    }
+    
+    
+    
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

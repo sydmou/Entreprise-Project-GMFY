@@ -27,7 +27,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Izm-b8-UBD">
-                        <barButtonItem key="leftBarButtonItem" title="..." id="3Qa-Jk-2aq"/>
+                        <barButtonItem key="leftBarButtonItem" title="..." id="3Qa-Jk-2aq">
+                            <connections>
+                                <action selector="log:" destination="ii1-Nk-szl" id="zPd-9O-0rH"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="登陆" id="Woh-BZ-ewv">
                             <connections>
                                 <segue destination="kjQ-kC-3Ae" kind="presentation" identifier="toLoginSegue" id="gCu-YM-8BY"/>
@@ -36,11 +40,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mtstatus" destination="3Qa-Jk-2aq" id="i1m-6U-YuB"/>
+                        <segue destination="gdn-Ym-LwM" kind="presentation" identifier="toChatSegue" id="yo6-vY-erb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xbB-Er-aEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="728" y="326"/>
+            <point key="canvasLocation" x="680" y="360"/>
         </scene>
         <!--用户登录-->
         <scene sceneID="tne-QT-ifu">
@@ -166,7 +171,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Utb-8h-2XD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2313" y="1007"/>
+            <point key="canvasLocation" x="1589" y="1153"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MXb-ZC-bEb">
@@ -202,7 +207,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hR7-TW-hyq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1501" y="326"/>
+            <point key="canvasLocation" x="1365" y="348"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hEh-id-tPh">
@@ -220,7 +225,10 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kd4-u8-xj2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1645" y="1007"/>
+            <point key="canvasLocation" x="501" y="1153"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="yo6-vY-erb"/>
+    </inferredMetricsTieBreakers>
 </document>
