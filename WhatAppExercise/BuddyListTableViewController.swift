@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BuddyListTableViewController: UITableViewController {
+class BuddyListTableViewController: UITableViewController,stateDelegate,messageDelegate {
 
     @IBOutlet weak var mtstatus: UIBarButtonItem!
     //好友数组，作为表格的数据源
@@ -22,10 +22,67 @@ class BuddyListTableViewController: UITableViewController {
     var unreadlist=[WXMessage]()
     var statelist=[WXstate]()
     
+    
+    
+    
+     func meOff() {
+        loginoff()
+    }
+    
+    func isOff(zhuangtai: WXstate) {
+        
+        for(index,oldState) in enumerate (statelist)
+        
+        {
+           if (zhuangtai.name == oldState.name)
+            
+            
+          {statelist.removeAtIndex(index)
+            
+   
+            break}
+  
+        }
+        
+        statelist.append(zhuangtai)
+        
+        
+        self.tableView.reloadData()
+        
+        
+        
+        
+    }
+    
+    
+    func isOn(zhuangtai: WXstate) {
+        for(index,oldState) in enumerate (statelist)
+            
+        {
+            if (zhuangtai.name == oldState.name)
+                
+                
+            {
+                
+                
+                
+                statelist[index].isOnline = false
+                
+                
+                break}
+            
+        }
+        
+
+        
+        
+        self.tableView.reloadData()
+    }
+    
     // get orgin delagate
     
     
-    
+   
     
     
     func shareDelegate()->AppDelegate{
@@ -83,6 +140,53 @@ class BuddyListTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    
+    override  func viewDidAppear(animated: Bool) {
+        
+        
+        
+        
+        //get user name 
+        
+        let myID=NSUserDefaults.standardUserDefaults().stringForKey("userNameID")
+        
+        //let auto login in
+        
+        
+        let autologin=NSUserDefaults.standardUserDefaults().boolForKey("autologin")
+        
+        
+       //use to myID and autologn to juge login
+        
+        //if configured you can login in auto
+        if ( myID != nil && autologin ) {
+        
+        self.login()
+        self.navigationItem.title=myID! + " my friend"
+            
+        
+        
+        // to login
+        }else{
+        
+        
+            self.performSegueWithIdentifier("toLoginSegue", sender: self)
+            }
+        
+        
+        
+        shareDelegate().stateDel = self
+        
+        shareDelegate().messageDel = self
+        
+        
+     
+
+        
+        
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -152,7 +256,28 @@ class BuddyListTableViewController: UITableViewController {
 
      In a storyboard-based application, you will often want to do a little preparation before navigation
     */
-    @IBAction func unwindToBlist(segue:UIStoryboardSegue!){}
+    @IBAction func unwindToBlist(segue:UIStoryboardSegue!){
+    
+    let source=segue.sourceViewController as LoginViewController
+        
+        if source.requireLogin{
+        
+             self.loginoff()
+         
+             self.login()
+        
+        
+        }
+    
+    
+    
+    }
+    
+    
+   
+    
+    
+    
     
     
     

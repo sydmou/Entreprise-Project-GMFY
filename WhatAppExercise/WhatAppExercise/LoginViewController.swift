@@ -21,6 +21,10 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var serverSY: UITextField!
     
     
+    
+    var requireLogin=false
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,8 +62,8 @@ class LoginViewController: UIViewController {
         
         }
         
-        
-        
+        requireLogin=true
+    
         
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
